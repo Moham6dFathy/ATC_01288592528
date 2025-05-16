@@ -21,9 +21,4 @@ export class CreateUserDto {
 
   @IsStrongPassword()
   password: string;
-
-  @IsOptional()
-  @IsString()
-  @IsEnum(['male', 'female'])
-  gender: string;
 }

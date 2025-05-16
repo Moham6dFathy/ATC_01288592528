@@ -4,7 +4,6 @@ import { ValidationPipe } from '@nestjs/common';
 import { GlobalExceptionFilter } from './exceptionFilters/global-exception.filter';
 import * as cookieParser from 'cookie-parser';
 import helmet from 'helmet';
-import { doubleCsrf } from 'csrf-csrf';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

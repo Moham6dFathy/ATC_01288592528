@@ -39,7 +39,6 @@ export class User {
 
   @Prop({
     type: String,
-    required: [true, 'Gender is required!'],
     enum: ['male', 'female'],
   })
   gender: string;
