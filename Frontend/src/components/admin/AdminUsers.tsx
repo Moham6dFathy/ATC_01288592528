@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Edit, Trash, Plus } from 'lucide-react';
 import { toast } from '@/components/ui/sonner';
+import { API_URL } from '@/config/api';
 
 // Assumes a getToken() function exists to retrieve the auth token
 const getToken = () => localStorage.getItem("token");
@@ -33,7 +34,7 @@ const AdminUsers: React.FC = () => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [formData, setFormData] = useState<Partial<User>>({ name: '', email: '', role: 'User' });
 
-  const API_BASE = 'http://localhost:3000/api/v1/users';
+  const API_BASE = `${API_URL}/users`;
 
   // Helper to build headers
   const authHeaders = () => ({
