@@ -12,7 +12,8 @@ The Event Booking System is a full-stack application designed to enable users to
 2. [Installation Instructions](#installation-instructions)
 3. [Usage Guide](#usage-guide)
 4. [Code Structure & Architecture](#code-structure--architecture)
-5. [API Reference](#api-reference)
+5. [API Documentation](#api-documentation)
+6. [Admin Dashboard Access](#admin-dashboard-access)
 6. [Configuration](#configuration)
 7. [Deployment Instructions](#deployment-instructions)
 8. [Contributing](#contributing)
@@ -139,6 +140,12 @@ root/
 ## API Documentation
 
 | Postman : https://documenter.getpostman.com/view/34728288/2sB2qXj2e4
+
+---
+
+## Admin Dashboard Access
+- **email**: admin@io.io
+- **password**: Admin@2003
 
 ---
 
