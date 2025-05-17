@@ -14,6 +14,7 @@ import {
   Query,
   UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { AuthGuard } from 'src/guards/auth.guard';
@@ -23,6 +24,7 @@ import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { CategoryDto } from './dtos/category.dto';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { EventDetailsDto } from '../events/dtos/event-details.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('category')
 export class CategoryController {
@@ -31,6 +33,7 @@ export class CategoryController {
   @Serialize(CategoryDto)
   @Roles('admin')
   @UseGuards(AuthGuard, RolesGuard)
+  @UseInterceptors(FileInterceptor('image'))
   @Post()
   createCategory(
     @Body() category: CreateCategoryDto,
@@ -69,12 +72,23 @@ export class CategoryController {
   @Serialize(CategoryDto)
   @Roles('admin')
   @UseGuards(AuthGuard, RolesGuard)
+  @UseInterceptors(FileInterceptor('image'))
   @Patch('/:categoryId')
   updateCategory(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 100000000 }),
+          new FileTypeValidator({ fileType: 'image/jpeg' }),
+        ],
+        fileIsRequired: false,
+      }),
+    )
+    image: Express.Multer.File,
     @Param('categoryId') categoryId: string,
     @Body() updatedBody: CreateCategoryDto,
   ) {
-    return this.categoryService.updateCategory(categoryId, updatedBody);
+    return this.categoryService.updateCategory(categoryId, updatedBody,image);
   }
 
   @Roles('admin')

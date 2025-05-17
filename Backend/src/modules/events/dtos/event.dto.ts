@@ -15,6 +15,9 @@ export class EventDto {
   venue: string;
 
   @Expose()
+  category: CategoryDto;
+
+  @Expose()
   price: string;
 
   @Expose()

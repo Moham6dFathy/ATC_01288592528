@@ -15,6 +15,7 @@ import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { Roles } from 'src/decorators/roles.decorator';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
+import { UpdateUserDto } from '../dtos/update-user.dto';
 
 @Roles('admin')
 @UseGuards(AuthGuard, RolesGuard)
@@ -41,7 +42,7 @@ export class UsersController {
   @Patch('/:userId')
   updateUser(
     @Param('userId') userId: string,
-    @Body() updatedBody: CreateUserDto,
+    @Body() updatedBody: UpdateUserDto,
   ) {
     return this.userService.updateUser(userId, updatedBody);
   }

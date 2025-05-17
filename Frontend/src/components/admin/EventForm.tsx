@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { format } from 'date-fns';
+import { format,parseISO } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -43,6 +43,7 @@ interface EventFormProps {
   onCategoryChange: (value: string) => void;
   onSubmit: () => void;
 }
+
 
 const EventForm: React.FC<EventFormProps> = ({
   formData,

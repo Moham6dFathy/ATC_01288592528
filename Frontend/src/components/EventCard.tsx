@@ -1,13 +1,13 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Event } from '@/types';
 import { Check, Calendar, MapPin, DollarSign, X, BookmarkCheck } from 'lucide-react';
 import { toast } from '@/components/ui/sonner';
 import { Link, useNavigate } from 'react-router-dom';
-import { isAuthenticated } from '@/services/authService';
+import { getUser, isAuthenticated } from '@/services/authService';
 import { format, parseISO } from 'date-fns';
-import { createBooking, cancelBooking } from '@/services/bookingService';
+import { createBooking, cancelBooking, getUserBookings } from '@/services/bookingService';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
@@ -27,8 +27,31 @@ const EventCard: React.FC<EventCardProps> = ({
   const [isBooked, setIsBooked] = useState(initialIsBooked);
   const [isBooking, setIsBooking] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
+  // const [bookingId, setBookingId] = useState<string | null>(null);
   const navigate = useNavigate();
+  const user = getUser()
 
+
+  useEffect(() => {
+      const checkBookingStatus = async () => {
+        if (!isAuthenticated() || !user || !event) return;
+        
+        try {
+          const userBookings = await getUserBookings(user.id);
+          const existingBooking = userBookings.find(booking => 
+            booking.event.id === event.id 
+          );
+          if (existingBooking) {
+            setIsBooked(true);
+          }
+        } catch (error) {
+          console.error("Error checking booking status:", error);
+        }
+      };
+      
+      checkBookingStatus();
+    }, [event, user]);
+    
   // Format date to be more readable
   const formatEventDate = (dateString: string) => {
     try {

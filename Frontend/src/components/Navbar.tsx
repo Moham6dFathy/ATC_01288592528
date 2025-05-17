@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { User } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { isAuthenticated, logout, isAdmin } from '@/services/authService';
+import { isAuthenticated, handleUnauthorized,logout, isAdmin } from '@/services/authService';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from '@/components/ui/sonner';
 import { ThemeToggle } from '@/components/ThemeToggle';

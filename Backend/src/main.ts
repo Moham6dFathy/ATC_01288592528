@@ -17,6 +17,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
+  
   //Global Exception filters
   app.useGlobalFilters(new GlobalExceptionFilter());
 

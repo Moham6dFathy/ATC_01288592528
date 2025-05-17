@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose from 'mongoose';
+import mongoose, { Query } from 'mongoose';
 import { isStrongPassword, isEmail, isDate } from 'validator';
 import { Role } from './role.enum';
 
@@ -77,3 +77,8 @@ export class User {
 export const UserSchema = SchemaFactory.createForClass(User);
 
 //TODO Cascade a user with booking (When user removed all bookings is deleted)
+// Query middleware: triggers on UserModel.deleteOne({ _id })
+UserSchema.pre('findOneAndDelete', async function () {
+  const filter = this.getFilter();
+  
+});

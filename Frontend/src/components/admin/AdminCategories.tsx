@@ -41,7 +41,7 @@ const AdminCategories = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
-  const [formData, setFormData] = useState({
+  const [fields, setFormData] = useState({
     name: '',
     description: '',
     image: ''
@@ -74,7 +74,7 @@ const AdminCategories = () => {
       setIsAddDialogOpen(false);
       resetForm();
       toast.success("Category Added", {
-        description: `${formData.name} has been added successfully`,
+        description: `${fields.name} has been added successfully`,
       });
     }
   });
@@ -88,7 +88,7 @@ const AdminCategories = () => {
       setEditingCategory(null);
       resetForm();
       toast.success("Category Updated", {
-        description: `${formData.name} has been updated successfully`,
+        description: `${fields.name} has been updated successfully`,
       });
     }
   });
@@ -107,7 +107,7 @@ const AdminCategories = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
-      ...formData,
+      ...fields,
       [name]: value
     });
   };
@@ -120,7 +120,7 @@ const AdminCategories = () => {
       // Create a temporary URL for preview
       const imageUrl = URL.createObjectURL(file);
       setFormData({
-        ...formData,
+        ...fields,
         image: imageUrl
       });
     }
@@ -138,13 +138,13 @@ const AdminCategories = () => {
   const handleAddCategory = () => {
     // Create FormData object for file upload
     const categoryFormData = new FormData();
-    categoryFormData.append('name', formData.name);
-    categoryFormData.append('description', formData.description);
+    categoryFormData.append('name', fields.name);
+    categoryFormData.append('description', fields.description);
     
     if (selectedFile) {
       categoryFormData.append('image', selectedFile);
-    } else if (formData.image) {
-      categoryFormData.append('imageUrl', formData.image);
+    } else if (fields.image) {
+      categoryFormData.append('image', fields.image);
     }
     
     createCategoryMutation.mutate(categoryFormData);
@@ -155,13 +155,13 @@ const AdminCategories = () => {
     
     // Create FormData object for file upload
     const categoryFormData = new FormData();
-    categoryFormData.append('name', formData.name);
-    categoryFormData.append('description', formData.description);
+    categoryFormData.append('name', fields.name);
+    categoryFormData.append('description', fields.description);
     
     if (selectedFile) {
       categoryFormData.append('image', selectedFile);
-    } else if (formData.image) {
-      categoryFormData.append('imageUrl', formData.image);
+    } else if (fields.image) {
+      categoryFormData.append('image', fields.image);
     }
     
     updateCategoryMutation.mutate({ 
@@ -184,21 +184,21 @@ const AdminCategories = () => {
     deleteCategoryMutation.mutate(id);
   };
   
-  // Handle search
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSearching(!!searchQuery.trim());
-    setCurrentPage(1);
-    refetchCategories();
-  };
+  // // Handle search
+  // const handleSearch = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setIsSearching(!!searchQuery.trim());
+  //   setCurrentPage(1);
+  //   refetchCategories();
+  // };
   
-  // Clear search
-  const clearSearch = () => {
-    setSearchQuery('');
-    setIsSearching(false);
-    setCurrentPage(1);
-    refetchCategories();
-  };
+  // // Clear search
+  // const clearSearch = () => {
+  //   setSearchQuery('');
+  //   setIsSearching(false);
+  //   setCurrentPage(1);
+  //   refetchCategories();
+  // };
   
   // Handle page change
   const handlePageChange = (direction: 'next' | 'prev') => {
@@ -271,7 +271,7 @@ const AdminCategories = () => {
                 <Input
                   id="name"
                   name="name"
-                  value={formData.name}
+                  value={fields.name}
                   onChange={handleInputChange}
                 />
               </div>
@@ -280,7 +280,7 @@ const AdminCategories = () => {
                 <Input
                   id="description"
                   name="description"
-                  value={formData.description}
+                  value={fields.description}
                   onChange={handleInputChange}
                 />
               </div>
@@ -302,15 +302,15 @@ const AdminCategories = () => {
                     id="imageUrl"
                     name="image"
                     placeholder="Image URL"
-                    value={selectedFile ? '' : formData.image}
+                    value={selectedFile ? '' : fields.image}
                     onChange={handleInputChange}
                     className="flex-1"
                   />
                 </div>
-                {formData.image && (
+                {fields.image && (
                   <div className="mt-2">
                     <img 
-                      src={formData.image} 
+                      src={fields.image} 
                       alt="Preview" 
                       className="h-40 object-cover rounded-md" 
                     />
@@ -331,7 +331,7 @@ const AdminCategories = () => {
       </div>
 
       {/* Search form */}
-      <div className="mb-6">
+      {/* <div className="mb-6">
         <form onSubmit={handleSearch} className="flex gap-2">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
@@ -348,9 +348,9 @@ const AdminCategories = () => {
             <Button variant="outline" onClick={clearSearch}>Clear</Button>
           )}
         </form>
-      </div>
+      </div> */}
 
-      {/* Results count */}
+      {/* Results count
       {isSearching && (
         <div className="mb-4">
           <p>
@@ -359,7 +359,7 @@ const AdminCategories = () => {
               : `Found ${categories.length} category${categories.length !== 1 ? 'ies' : 'y'} matching "${searchQuery}"`}
           </p>
         </div>
-      )}
+      )} */}
 
       {categories.length === 0 ? (
         <div className="text-center py-12 border rounded-md">
@@ -444,7 +444,7 @@ const AdminCategories = () => {
               <Input
                 id="edit-name"
                 name="name"
-                value={formData.name}
+                value={fields.name}
                 onChange={handleInputChange}
               />
             </div>
@@ -453,7 +453,7 @@ const AdminCategories = () => {
               <Input
                 id="edit-description"
                 name="description"
-                value={formData.description}
+                value={fields.description}
                 onChange={handleInputChange}
               />
             </div>
@@ -475,15 +475,15 @@ const AdminCategories = () => {
                   id="edit-imageUrl"
                   name="image"
                   placeholder="Image URL"
-                  value={selectedFile ? '' : formData.image}
+                  value={selectedFile ? '' : fields.image}
                   onChange={handleInputChange}
                   className="flex-1"
                 />
               </div>
-              {formData.image && (
+              {fields.image && (
                 <div className="mt-2">
                   <img 
-                    src={formData.image} 
+                    src={fields.image} 
                     alt="Preview" 
                     className="h-40 object-cover rounded-md" 
                   />

@@ -14,7 +14,6 @@ interface RegisterData {
   password: string;
 }
 
-// Login user
 export const login = async (credentials: LoginCredentials) => {
   try {
     const response = await fetch(`${API_URL}/auth/signin`, {
@@ -31,10 +30,14 @@ export const login = async (credentials: LoginCredentials) => {
     }
 
     const data = await response.json();
-    // Store token in local storage
+
+    // Store token and expiration time in localStorage
+    const expiresAt = Date.now() + 29 * 60 * 1000; // 29 minutes from now
+
     localStorage.setItem("token", data.access_token);
     localStorage.setItem("user", JSON.stringify(data.user));
-    
+    localStorage.setItem("token_expires_at", expiresAt.toString());
+
     return data;
   } catch (error) {
     if (error instanceof Error) {
@@ -76,7 +79,17 @@ export const logout = () => {
 };
 
 export const isAuthenticated = (): boolean => {
-  return localStorage.getItem("token") !== null;
+  const token = localStorage.getItem("token");
+  const expiresAt = parseInt(localStorage.getItem("token_expires_at") || "0", 10);
+
+  if (!token || Date.now() > expiresAt) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("token_expires_at");
+    return false;
+  }
+
+  return true;
 };
 
 export const getUser = (): User | null => {

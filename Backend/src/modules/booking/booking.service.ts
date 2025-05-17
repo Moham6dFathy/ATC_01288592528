@@ -1,5 +1,7 @@
 import {
   ForbiddenException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -10,8 +12,6 @@ import mongoose, { Connection, Document, Model } from 'mongoose';
 import { UsersService } from '../auth/services/users.service';
 import { EventsService } from '../events/events.service';
 import { UpdateBookingDto } from './dtos/update-booking.dto';
-import { CurrentUser } from 'src/decorators/current-user.decorator';
-import { CreateUserDto } from '../auth/dtos/create-user.dto';
 import { UserDto } from '../auth/dtos/user.dto';
 
 @Injectable()
@@ -19,6 +19,7 @@ export class BookingService {
   constructor(
     @InjectModel(Booking.name) private bookingModel: Model<Booking>,
     @InjectConnection() private readonly connection: Connection,
+    @Inject(forwardRef(() => UsersService))
     private usersService: UsersService,
     private eventsService: EventsService,
   ) {}

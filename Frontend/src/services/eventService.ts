@@ -25,9 +25,9 @@ export const getAllEvents = async (): Promise<Event[]> => {
 };
 
 // Get single event by ID or slug
-export const getEventById = async (idOrSlug: string): Promise<Event> => {
+export const getEventById = async (id: string): Promise<Event> => {
   try {
-    const response = await fetch(`${API_URL}/events/${idOrSlug}`);
+    const response = await fetch(`${API_URL}/events/${id}`);
     
     if (!response.ok) {
       throw new Error("Failed to fetch event");

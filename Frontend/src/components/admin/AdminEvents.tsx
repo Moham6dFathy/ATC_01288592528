@@ -15,7 +15,7 @@ import { Event } from '@/types';
 // Import the new components
 import EventsTable from './EventsTable';
 import EventForm from './EventForm';
-import EventSearch from './EventSearch';
+// import EventSearch from './EventSearch';
 import EventsPagination from './EventsPagination';
 import { useEventForm } from '@/hooks/useEventForm';
 
@@ -149,7 +149,7 @@ const AdminEvents = () => {
     const eventFormData = new FormData();
     eventFormData.append('name', formData.name);
     // Convert price to string if it's a number
-    eventFormData.append('price', String(formData.price));
+    eventFormData.append('price', formData.price);
     // Convert date if needed
     if (formData.date) {
       try {
@@ -167,7 +167,7 @@ const AdminEvents = () => {
     
     if (formData.categoryId) {
       // Fix: Convert categoryId to string explicitly
-      eventFormData.append('categoryId', String(formData.categoryId));
+      eventFormData.append('category', String(formData.categoryId));
     }
     
     if (formData.description) {
@@ -177,7 +177,7 @@ const AdminEvents = () => {
     if (selectedFile) {
       eventFormData.append('image', selectedFile);
     } else if (formData.image) {
-      eventFormData.append('imageUrl', String(formData.image));
+      eventFormData.append('image', String(formData.image));
     }
     
     updateEventMutation.mutate({ 
@@ -190,7 +190,7 @@ const AdminEvents = () => {
     setEditingEvent(event);
     setFormData({
       name: event.name,
-      price: event.price,
+      price: String(event.price),
       date: event.date,
       image: event.image,
       venue: event.venue || '',
@@ -205,20 +205,20 @@ const AdminEvents = () => {
   };
   
   // Handle search
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSearching(!!searchQuery.trim());
-    setCurrentPage(1);
-    refetchEvents();
-  };
+  // const handleSearch = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setIsSearching(!!searchQuery.trim());
+  //   setCurrentPage(1);
+  //   refetchEvents();
+  // };
   
-  // Clear search
-  const clearSearch = () => {
-    setSearchQuery('');
-    setIsSearching(false);
-    setCurrentPage(1);
-    refetchEvents();
-  };
+  // // Clear search
+  // const clearSearch = () => {
+  //   setSearchQuery('');
+  //   setIsSearching(false);
+  //   setCurrentPage(1);
+  //   refetchEvents();
+  // };
   
   // Handle page change
   const handlePageChange = (direction: 'next' | 'prev') => {
@@ -259,7 +259,7 @@ const AdminEvents = () => {
         </Dialog>
       </div>
 
-      {/* Search component */}
+      {/* Search component
       <EventSearch
         searchQuery={searchQuery}
         isSearching={isSearching}
@@ -267,7 +267,7 @@ const AdminEvents = () => {
         onSearch={handleSearch}
         onClearSearch={clearSearch}
         resultsCount={events.length}
-      />
+      /> */}
 
       {/* Table component */}
       <div className="mb-4">

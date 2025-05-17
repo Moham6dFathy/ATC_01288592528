@@ -57,6 +57,7 @@ export const createCategory = async (categoryData: FormData): Promise<Category> 
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
+
       },
       body: categoryData,
     });

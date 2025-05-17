@@ -13,17 +13,22 @@ import {
   PaginationPrevious 
 } from '@/components/ui/pagination';
 import { getUserBookings } from '@/services/bookingService';
-import { isAuthenticated } from '@/services/authService';
+import { getUser, isAuthenticated } from '@/services/authService';
 import { Booking } from '@/types';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { BookmarkCheck } from 'lucide-react';
+import { BookmarkCheck, Check } from 'lucide-react';
+import { Button } from 'react-day-picker';
 
 const EVENTS_PER_PAGE = 9;
 
 const EventsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [userBookings, setUserBookings] = useState<Booking[]>([]);
-  
+  const [isBooked, setIsBooked] = useState(false);
+  const [bookingId, setBookingId] = useState<string | null>(null);
+  const [isBooking, setIsBooking] = useState(false);
+  const user = getUser();
+
   // Fetch all events
   const { 
     data: events = [], 
@@ -35,6 +40,7 @@ const EventsPage = () => {
       return await getAllEvents();
     },
   });
+  
   
   // Fetch user's bookings if authenticated
   useEffect(() => {
@@ -57,7 +63,7 @@ const EventsPage = () => {
     
     fetchUserBookings();
   }, []);
-  
+      
   // Calculate total pages
   const totalPages = Math.ceil(events.length / EVENTS_PER_PAGE);
   
@@ -68,7 +74,10 @@ const EventsPage = () => {
   
   // Get booked events
   const bookedEvents = events.filter(event => 
-    userBookings.some(booking => booking.eventId === event.id)
+    userBookings.some(booking => {
+      booking.eventId === event.id
+    })
+    
   );
   
   // Check if event is booked
@@ -143,6 +152,7 @@ const EventsPage = () => {
                   className="shadow-md border-purple-200 dark:border-purple-800/50"
                 />
               ))}
+              
             </div>
           </CardContent>
         </Card>

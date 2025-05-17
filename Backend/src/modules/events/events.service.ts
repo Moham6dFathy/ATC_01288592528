@@ -69,26 +69,23 @@ export class EventsService {
   async updateEvent(
     id: string,
     updatedBody: UpdateEventDto,
-    image: Express.Multer.File,
+    image?: Express.Multer.File,
   ) {
     if (image) {
       const storedPath = await this.uploadFile(image);
       updatedBody.image = storedPath;
     }
-    const updatedEvent = await this.eventModel.findByIdAndUpdate(
-      id,
-      updatedBody,
-      {
-        new: true,
-        runValidators: true,
-      },
-    );
-
-    if (!updatedEvent) {
+    const event = await this.eventModel.findById(id);
+    console.log(updatedBody);
+    if (!event) {
       throw new NotFoundException('Event is not found');
     }
 
-    return updatedEvent;
+    Object.assign(event, updatedBody);
+    await event.save();
+    // console.log(event);
+
+    return event;
   }
 
   async deleteEvent(id: string, session?: ClientSession) {

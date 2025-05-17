@@ -32,8 +32,8 @@ export class EventsController {
 
   @Roles('admin')
   @UseGuards(AuthGuard, RolesGuard)
-  @Post()
   @UseInterceptors(FileInterceptor('image'))
+  @Post()
   async createEvent(
     @Body() body: CreateEventDto,
     @UploadedFile(
@@ -65,6 +65,7 @@ export class EventsController {
   @Serialize(EventDto)
   @Roles('admin')
   @UseGuards(AuthGuard, RolesGuard)
+  @UseInterceptors(FileInterceptor('image'))
   @Patch('/:eventId')
   updateEvent(
     @Param('eventId') eventId: string,
@@ -80,7 +81,7 @@ export class EventsController {
     )
     image: Express.Multer.File,
   ) {
-    return this.eventService.updateEvent(eventId, updatedBody,image);
+    return this.eventService.updateEvent(eventId, updatedBody, image);
   }
 
   @Roles('admin')

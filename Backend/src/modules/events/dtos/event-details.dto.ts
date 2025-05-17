@@ -2,6 +2,9 @@ import { Expose, Type } from 'class-transformer';
 import { CategoryDto } from 'src/modules/category/dtos/category.dto';
 
 export class EventDetailsDto {
+  @Expose({ name: 'id' })
+  id: string;
+
   @Expose()
   name: string;
 

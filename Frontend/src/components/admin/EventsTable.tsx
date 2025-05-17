@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Edit, Trash } from 'lucide-react';
 import { Event, Category } from '@/types';
+import { format, parseISO } from 'date-fns';
 
 interface EventsTableProps {
   events: Event[];
@@ -17,6 +18,16 @@ interface EventsTableProps {
   onDeleteEvent: (id: string) => void;
   isDeleting: boolean;
 }
+
+// Format date to be more readable
+const formatEventDate = (dateString: string) => {
+  try {
+    const date = typeof dateString === 'string' ? parseISO(dateString) : new Date(dateString);
+    return format(date, 'MMMM d, yyyy');
+  } catch (error) {
+    return dateString; // Return the original string if parsing fails
+  }
+};
 
 const EventsTable: React.FC<EventsTableProps> = ({ 
   events, 
@@ -92,8 +103,8 @@ const EventsTable: React.FC<EventsTableProps> = ({
             <TableRow key={event.id}>
               <TableCell>{event.name}</TableCell>
               <TableCell>{event.price}</TableCell>
-              <TableCell>{event.date}</TableCell>
-              <TableCell>{getCategoryNameById(event.categoryId)}</TableCell>
+              <TableCell>{formatEventDate(event.date)}</TableCell>
+              <TableCell>{getCategoryNameById(event.categoryName)}</TableCell>
               <TableCell>
                 <div className="flex space-x-2">
                   <Button 

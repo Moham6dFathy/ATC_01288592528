@@ -18,15 +18,12 @@ export class CategoryService {
   //TODO Handle Upload Images
   async uploadFile(file: Express.Multer.File): Promise<string> {
     const uploadDir = path.join(process.cwd(), 'src', 'uploads');
-    // Ensure the uploads folder exists
     await fs.mkdir(uploadDir, { recursive: true });
 
     const filePath = path.join(uploadDir, file.originalname);
 
-    // Save the file
     await fs.writeFile(filePath, file.buffer);
 
-    // Return relative path
     return `src/uploads/${file.originalname}`;
   }
 
@@ -70,15 +67,27 @@ export class CategoryService {
     return category;
   }
 
-  async updateCategory(id: string, updateBody: CreateCategoryDto) {
-    const updatedCategory = await this.categoryModel.findByIdAndUpdate(id, {
-      updateBody,
-    });
-    if (!updatedCategory) {
+  async updateCategory(
+    id: string,
+    updateBody: CreateCategoryDto,
+    image?: Express.Multer.File,
+  ) {
+    if (image) {
+      const storedPath = await this.uploadFile(image);
+      updateBody.image = storedPath;
+    }
+    const category = await this.categoryModel.findById(id);
+
+    Object.assign(category, updateBody);
+    
+    await category.save();
+
+    console.log(updateBody);
+    if (!category) {
       throw new NotFoundException('Category not found ');
     }
 
-    return updatedCategory;
+    return category;
   }
 
   async deleteCategory(id: string) {

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { CategoryController } from './category.controller';
 import { CategoryService } from './category.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -18,8 +18,8 @@ import { EventsModule } from '../events/events.module';
       },
     ]),
 
-    AuthModule,
-    EventsModule
+    forwardRef(() => AuthModule),
+    forwardRef(() => EventsModule),
   ],
   controllers: [CategoryController],
   providers: [CategoryService, JwtService, ConfigService],

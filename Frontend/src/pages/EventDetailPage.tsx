@@ -36,9 +36,8 @@ const EventDetailPage = () => {
       try {
         const userBookings = await getUserBookings(user.id);
         const existingBooking = userBookings.find(booking => 
-          booking.event?.id === event.id || booking.eventId === event.id
+          booking.event.id === event.id 
         );
-        
         if (existingBooking) {
           setIsBooked(true);
           setBookingId(existingBooking.id);
