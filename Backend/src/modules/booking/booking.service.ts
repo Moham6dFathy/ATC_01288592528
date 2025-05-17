@@ -8,7 +8,7 @@ import {
 import { CreateBookingDto } from './dtos/create-booking.dto';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Booking } from './schemas/booking.schema';
-import mongoose, { Connection, Document, Model } from 'mongoose';
+import mongoose, { ClientSession, Connection, Document, Model } from 'mongoose';
 import { UsersService } from '../auth/services/users.service';
 import { EventsService } from '../events/events.service';
 import { UpdateBookingDto } from './dtos/update-booking.dto';
@@ -119,6 +119,15 @@ export class BookingService {
     await this.bookingModel.deleteMany({
       user: new mongoose.Types.ObjectId(userId),
     });
+  }
+
+  async deleteBookingByEventId(eventId: string, session?: ClientSession) {
+    await this.bookingModel.deleteMany(
+      {
+        event: new mongoose.Types.ObjectId(eventId),
+      },
+      session ? { session } : undefined,
+    );
   }
 
   async deleteAllBookings() {
